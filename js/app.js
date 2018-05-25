@@ -53,14 +53,9 @@ for (let i = 0; i < 16; i++) {
 
 const deck = document.querySelector(".deck");
 
-deck.appendChild(fragment); // reflow and repaint here -- once!
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+//add each card's HTML to the page
+deck.appendChild(fragment); // reflow and repaint here -- once!
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 
