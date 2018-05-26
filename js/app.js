@@ -1,17 +1,17 @@
 /*
  * Create a list that holds all of your cards
  */
-/*const singleCardArray = ['<li class="card"> <i class="fa fa-diamond"></i></li>', '<li class="card"> <i class="fa fa-paper-plane-o"></i></li>', 
-'<li class="card"> <i class="fa fa-anchor"></i></li>', '<li class="card"> <i class="fa fa-leaf"></i></li>', '<li class="card"> <i class="fa fa-bicycle"></i></li>"',
-'<li class="card"> <i class="fa fa-bomb"></i></li>', '<li class="card"> <i class="fa fa-cube"></i></li>', '<li class="card"> <i class="fa fa-bolt"></i></li>'];*/
+
 const singleCardArray = ["diamond", "paper-plane-o", "anchor", "leaf", "bicycle", "bomb", "cube", "bolt"];
 let cardArray= [];
+const deck = document.querySelector(".deck"); //ehhez adom az event listenert
+let openArray = [];
+let moveCounter = 0;
 
-
+// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
-    //in the while cycle the random selected card and the currentIndexed card are switched 16 times 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -21,6 +21,40 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+function showSymbol(event){
+    event.target.className = "card open show viewed";
+}
+
+
+function addCardToOpenArray(event){
+    openArray.push(event.target.querySelector('i').className);
+    
+
+    if (openArray.length == 2){
+        if(openArray[1] === openArray[0]){
+            event.target.className = "card open show match";
+            deck.querySelector(".viewed").className = "card open show match";
+            console.log(openArray);
+            openArray = [];
+            
+        }else{
+            //disable();
+            setTimeout(function(){
+                event.target.className ="card";
+                deck.querySelector(".viewed").className = "card";
+                console.log(openArray);
+                //enable();
+                openArray=[];
+                }, 1300);
+        }
+    }
+}
+
+function incrementMoveCounter(){
+    moveCounter++;
+    document.getElementsByClassName("moves")[0].innerHTML = moveCounter + " Moves";
 }
 
 
@@ -36,14 +70,14 @@ console.log(cardArray);
 
 shuffle(cardArray);
 
-
-//loop through and create HTML
+//loop through the cardArray and create HTML
 
 const fragment = document.createDocumentFragment();  // ← uses a DocumentFragment instead of a <div>
 
 for (let i = 0; i < 16; i++) {
     const newListElement = document.createElement("li");
-    newListElement.className = "card open show";
+    newListElement.setAttribute("id", i);
+    newListElement.className = "card";
     const newIcon = document.createElement("i");
     newIcon.className = "fa fa-" + cardArray[i];
     newListElement.appendChild(newIcon);
@@ -51,13 +85,19 @@ for (let i = 0; i < 16; i++) {
     fragment.appendChild(newListElement);
 }
 
-const deck = document.querySelector(".deck");
-
-
 //add each card's HTML to the page
 deck.appendChild(fragment); // reflow and repaint here -- once!
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+//EventListener for a card, if it is clicked
+deck.addEventListener('click', function(event){
+
+    if ( event.target.nodeName === "LI" && openArray.length <= 1){
+    showSymbol(event);
+    addCardToOpenArray(event);
+    incrementMoveCounter();
+    //displayWinningMessage();
+    }
+});
 
 
 
