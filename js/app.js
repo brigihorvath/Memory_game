@@ -5,6 +5,7 @@
 const singleCardArray = ["diamond", "paper-plane-o", "anchor", "leaf", "bicycle", "bomb", "cube", "bolt"];
 let cardArray= [];
 const deck = document.querySelector(".deck"); //ehhez adom az event listenert
+const cards = deck.getElementsByClassName("card");
 let openArray = [];
 let moveCounter = 0;
 let countTilWin = 0;
@@ -36,8 +37,10 @@ function showSymbol(event){
 //function to add card to the open array
 function addCardToOpenArray(event){
     openArray.push(event.target.querySelector('i').className);
-    if (openArray.length == 2){
+    
+    if (openArray.length == 2){ 
         if(openArray[1] === openArray[0]){
+            deck.style.pointerEvents = "none";
             event.target.className = "card open show match";
             deck.querySelector(".viewed").className = "card open show match";
             countTilWin++;
@@ -45,18 +48,28 @@ function addCardToOpenArray(event){
                 if(countTilWin === 8 ){
                     displayWinningMessage();
                     document.querySelector(".lightBox").style.display = "block";
+ 
                 }}, 500);
+            
+            setTimeout(function(){
+            deck.style.pointerEvents = "auto";
+                }, 1600);
         }else{
+            deck.style.pointerEvents = "none";
             setTimeout(function(){
                 event.target.className ="card unmatch";
                 deck.querySelector(".viewed").className = "card unmatch";
             }, 800);
+
             setTimeout(function(){
                 event.target.className ="card";
                 deck.querySelector(".unmatch").className = "card";
+                deck.style.pointerEvents = "auto";
             }, 1600);
+
         }
         openArray = [];
+        //
     }
 }
 
