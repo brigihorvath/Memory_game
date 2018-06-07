@@ -173,7 +173,7 @@ h1 {
 */
 .lightBox{
     /** Default lightbox to hidden */
-    display: block;
+    display: none;
 
     /** Position and style */
     position: fixed;
