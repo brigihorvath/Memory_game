@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-
+//variable declarations
 const singleCardArray = ["diamond", "paper-plane-o", "anchor", "leaf", "bicycle", "bomb", "cube", "bolt"];
 let cardArray= [];
 const deck = document.querySelector(".deck"); //ehhez adom az event listenert
@@ -15,6 +15,10 @@ const stars = document.querySelector(".stars");
 let text = "";
 let numberOfMoves;
 let numberOfStars = 3;
+let second = 0;
+let minute = 0;
+const timer = document.querySelector('.timer');
+let interval;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -34,10 +38,9 @@ function showSymbol(event){
     event.target.className = "card open show viewed";
 }
 
-//function to add card to the open array
+//function to add card to the open array and check if they open cards are the sam
 function addCardToOpenArray(event){
     openArray.push(event.target.querySelector('i').className);
-    
     if (openArray.length == 2){ 
         if(openArray[1] === openArray[0]){
             deck.style.pointerEvents = "none";
@@ -46,33 +49,30 @@ function addCardToOpenArray(event){
             countTilWin++;
             setTimeout(function() {
                 if(countTilWin === 8 ){
+                    clearInterval(interval);
                     displayWinningMessage();
                     document.querySelector(".lightBox").style.display = "block";
- 
                 }}, 500);
-            
             setTimeout(function(){
-            deck.style.pointerEvents = "auto";
-                }, 1600);
+                deck.style.pointerEvents = "auto";
+            }, 1600);
         }else{
             deck.style.pointerEvents = "none";
             setTimeout(function(){
                 event.target.className ="card unmatch";
                 deck.querySelector(".viewed").className = "card unmatch";
             }, 800);
-
             setTimeout(function(){
                 event.target.className ="card";
                 deck.querySelector(".unmatch").className = "card";
                 deck.style.pointerEvents = "auto";
             }, 1600);
-
         }
         openArray = [];
-        //
     }
 }
 
+//function for the move counter and to change the number of stars
 function incrementMoveCounter(){
     moveCounter++;
     numberOfMoves = moveCounter/2;
@@ -87,14 +87,42 @@ function incrementMoveCounter(){
         stars.removeChild(document.querySelector("li"));
         numberOfStars = 0;
     }
+    if (moveCounter === 1){
+        startTimer();
+    }
 }
 
+//to fill in the content of the lightbox, that is shown when the player turned all the cards
 function displayWinningMessage(){
     for(let i = 0; i < numberOfStars; i++){
         text += '<li><i class="fa fa-star"></i></li>';
     }
     document.getElementsByClassName("moves")[1].innerHTML = " " + numberOfMoves.toFixed(0) + " moves ";
-    document.getElementsByClassName("numberOfStars")[0].innerHTML = " " + numberOfStars.toFixed(0) + " stars " + text;
+    document.getElementsByClassName("numberOfStars")[0].innerHTML = text;
+    if(minute === 0){
+        document.getElementsByClassName("timerToMessage")[0].innerHTML = " " + second + "sec";
+        }else{
+            document.getElementsByClassName("timerToMessage")[0].innerHTML = " " + minute + " min " + second + "sec";
+        }
+    }
+
+function startTimer(){
+    interval = setInterval(function(){
+        if(minute > 0){
+            timer.innerHTML = minute + " min " + second + "sec";
+        }else{
+            timer.innerHTML = second + "sec";        
+        }
+        second++;
+        if(second == 60){
+            minute++;
+            second = 0;
+        }
+        if(minute == 60){
+            hour++;
+            minute = 0;
+        }
+    },1000);
 }
 
 //create an array with the duplicate of the cards in singleCardArray
@@ -102,7 +130,6 @@ for (var i = 0; i < singleCardArray.length; i++) {
     cardArray.push(singleCardArray[i]);
     cardArray.push(singleCardArray[i]);
 }
-console.log(cardArray);
 
 //shuffle cards
 shuffle(cardArray);
@@ -122,7 +149,8 @@ for (let i = 0; i < 16; i++) {
 //add each card's HTML to the page
 deck.appendChild(fragment); // reflow and repaint here -- once!
 
-//EventListener for a card, if it is clicked
+//EventListener for the deck, if it is clicked
+//this way I don't have to add EventListener to all of the cards, only one to the deck
 deck.addEventListener('click', function(event){
     if ( event.target.nodeName === "LI" && openArray.length <= 1){
         showSymbol(event);
