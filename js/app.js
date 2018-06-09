@@ -2,7 +2,8 @@
  * Create a list that holds all of your cards
  */
 //variable declarations
-const singleCardArray = ["diamond", "paper-plane-o", "anchor", "leaf", "bicycle", "bomb", "cube", "bolt"];
+const singleCardArray = ["diamond", "paper-plane-o", "anchor", "leaf", 
+"bicycle", "bomb", "cube", "bolt"];
 let cardArray= [];
 const deck = document.querySelector(".deck"); //ehhez adom az event listenert
 const cards = deck.getElementsByClassName("card");
@@ -76,7 +77,7 @@ function addCardToOpenArray(event){
 function incrementMoveCounter(){
     moveCounter++;
     numberOfMoves = moveCounter/2;
-    document.getElementsByClassName("moves")[0].innerHTML = " " + numberOfMoves.toFixed(0) + " moves";
+    document.getElementsByClassName("moves")[0].innerHTML = ` ${numberOfMoves.toFixed(0)} moves`;
     if (moveCounter === 30){
         stars.removeChild(document.querySelector("li"));
         numberOfStars = 2;
@@ -97,21 +98,21 @@ function displayWinningMessage(){
     for(let i = 0; i < numberOfStars; i++){
         text += '<li><i class="fa fa-star"></i></li>';
     }
-    document.getElementsByClassName("moves")[1].innerHTML = " " + numberOfMoves.toFixed(0) + " moves ";
+    document.getElementsByClassName("moves")[1].innerHTML = ` ${numberOfMoves.toFixed(0)} moves`;
     document.getElementsByClassName("numberOfStars")[0].innerHTML = text;
     if(minute === 0){
-        document.getElementsByClassName("timerToMessage")[0].innerHTML = " " + second + "sec";
+        document.getElementsByClassName("timerToMessage")[0].innerHTML = ` ${second} sec`;
         }else{
-            document.getElementsByClassName("timerToMessage")[0].innerHTML = " " + minute + " min " + second + "sec";
+            document.getElementsByClassName("timerToMessage")[0].innerHTML = ` ${minute} min ${second} sec`;
         }
     }
 
 function startTimer(){
     interval = setInterval(function(){
         if(minute > 0){
-            timer.innerHTML = minute + " min " + second + "sec";
+            timer.innerHTML = ` ${minute} min ${second} sec`;
         }else{
-            timer.innerHTML = second + "sec";        
+            timer.innerHTML = ` ${second} sec`;        
         }
         second++;
         if(second == 60){
